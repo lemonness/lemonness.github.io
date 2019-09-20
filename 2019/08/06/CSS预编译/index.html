@@ -87,10 +87,13 @@
 <meta property="og:site_name" content="YouY的博客">
 <meta property="og:description" content="三种css预处理器css预处理器的定义及由来定义：预编译又称为预处理，是做些代码文本的替换工作处理，条件编译等就是为编译做的预备工作的阶段主要处理#开始的预编译指令预编译指令指示了在程序正式编译前就由编译器进行的操作，可以放在程序中的任何位置。 由于css的繁重、冗杂样式、加上低复用性，使得css被开发出来 弥补了css的以下缺憾  语法不够强大  无法嵌套使得模块化开发中需要书写很多重复的选择器">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-08-06T15:53:30.332Z">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H040155c5cad5460e98ae836f2081f4abI.jpg">
+<meta property="og:image" content="https://ae01.alicdn.com/kf/H1c837463558045dbbe01995b7ea10f4ao.jpg">
+<meta property="og:updated_time" content="2019-08-07T03:10:41.826Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CSS预编译">
 <meta name="twitter:description" content="三种css预处理器css预处理器的定义及由来定义：预编译又称为预处理，是做些代码文本的替换工作处理，条件编译等就是为编译做的预备工作的阶段主要处理#开始的预编译指令预编译指令指示了在程序正式编译前就由编译器进行的操作，可以放在程序中的任何位置。 由于css的繁重、冗杂样式、加上低复用性，使得css被开发出来 弥补了css的以下缺憾  语法不够强大  无法嵌套使得模块化开发中需要书写很多重复的选择器">
+<meta name="twitter:image" content="https://ae01.alicdn.com/kf/H040155c5cad5460e98ae836f2081f4abI.jpg">
 
 
 
@@ -342,7 +345,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1.7k
+                  2.8k
                 </span>
               
 
@@ -358,7 +361,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  6
+                  10
                 </span>
               
             </div>
@@ -418,6 +421,8 @@
 <li>Less：我认为跟 JS 一样，逐级查找，向上冒泡。</li>
 <li>Stylus：完全等同 Less。Stylus 和 Sass 则更倾向于指令式。</li>
 </ul>
+<h3 id="嵌套"><a href="#嵌套" class="headerlink" title="嵌套"></a>嵌套</h3><p>在使用子选择器时，CSS缺乏可视化层次结构。 您必须在单独的行中编写选择器及其组合。 嵌套提供了HTML中的可视化层次结构，并提高了可读性。 在某些情况下，嵌套会导致选择器过大而类似“选择器列车”，因此请明智地使用它。下面为具体实例</p>
+<p><img src="https://ae01.alicdn.com/kf/H040155c5cad5460e98ae836f2081f4abI.jpg" alt="实例"></p>
 <h3 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h3><p><a href="https://www.liaoxuefeng.com/wiki/897692888725344/923030524000032" target="_blank" rel="noopener">对多重继承较为完善的理解</a></p>
 <p><a href="https://zh.wikipedia.org/wiki/%E9%B8%AD%E5%AD%90%E7%B1%BB%E5%9E%8B" target="_blank" rel="noopener">对鸭子类型的理解</a>  此处的对数据类型的理解为：在python中如果你定义了一个字符串 使用了*符号，也可以进行计算，在用函数操作时，会识别你是继承自那个类，如果是字符串类，则进行拼接字符串，如果是数字，则继承数字类进行计算</p>
 <p>或者理解为，在字符串类和数字类中，都有*该方法，但是定义的效果不同，因此当你声明变量的时候，就已经把该类赋予给了对象，因此可以调用其方法 此处引申到<a href="https://zh.wikipedia.org/wiki/%E5%A4%9A%E5%9E%8B_(%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6)" target="_blank" rel="noopener">多态的概念</a></p>
@@ -435,11 +440,114 @@
 </ul>
 <h3 id="导入-import"><a href="#导入-import" class="headerlink" title="导入@import"></a>导入@import</h3><p>CSS中，不建议用@import导入css，因为会增加http请求。但 CSS 预处理器中的导入和CSS的有hhe很大区别，它是将不同 css 是在语义上导入，最终编译结果会生成一个CSS文件。</p>
 <p>值得注意的是，如果不同文件相互引入的时候，出现相同变量名时可能会引起错误。所以我的建议是<strong>单独</strong>设一个 var.sass/less/styl 文件来记录所有你定义的变量。</p>
+<h3 id="Imports"><a href="#Imports" class="headerlink" title="Imports"></a>Imports</h3><p>Rather than using a one large file, separating your codes in small pieces is helpful for expressing your declarations and increasing maintainability and control over the codebase. You can group the similar code chunks in similar folders and import them to main css file. Also with <code>import</code> statement, frameworks can also be added to work packages.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@import &quot;library&quot;;</span><br><span class="line">@import &quot;mixins/mixin.scss&quot;;</span><br><span class="line">@import &quot;reset.css&quot;;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@import</span> <span class="string">"library"</span></span><br><span class="line"><span class="variable">@import</span> <span class="string">"mixins/mixin.less"</span></span><br><span class="line"><span class="variable">@import</span> <span class="string">"reset.css"</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@import <span class="string">"library"</span></span><br><span class="line">@import <span class="string">"mixins/mixin.styl"</span></span><br><span class="line">@import <span class="string">"reset.css</span></span><br></pre></td></tr></table></figure>
+
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
 <li>三种与编译器都各有优点，选择熟练的和对团队合作有利的</li>
 <li>stylus的便捷性更高，代码简洁</li>
 <li>Sass和Less语法严谨、Stylus相对自由。因为Less长得更像 css，所以它可能学习起来更容易。</li>
 </ul>
+<p>css选择器的内容 特异性也指优先级</p>
+<p>优先级：内嵌样式表&gt;层级样式表&gt;导入样式表</p>
+<p>内嵌样式&gt;id选择器&gt;类选择器&gt;元素选择器&gt;通用选择器和继承选择器</p>
+<p>最后定义的规则会覆盖任何先前的冲突规则。</p>
+<p>选择器具有相同的特异性值时，最新的规则优先。</p>
+<p>当选择器具有不相等的特异性值时，更具体的规则优先。</p>
+<p>JOSN建构于两种结构：</p>
+<ul>
+<li>“名称/值”对的集合（A collection of name/value pairs）。不同的语言中，它被理解为<em>对象（object）</em>，纪录（record），结构（struct），字典（dictionary），哈希表（hash table），有键列表（keyed list），或者关联数组 （associative array）。</li>
+<li>值的有序列表（An ordered list of values）。在大部分语言中，它被理解为数组（array）。</li>
+</ul>
+<p>关于转义字符，及取消转义字符的方法</p>
+<p>所有的<a href="https://baike.baidu.com/item/ASCII码" target="_blank" rel="noopener">ASCII码</a>都可以用“\”加数字（一般是8进制数字）来表示。而C中定义了一些字母前加\来表示常见的那些不能显示的ASCII<a href="https://baike.baidu.com/item/字符" target="_blank" rel="noopener">字符</a>，如\0,\t,\n等，就称为转义字符，因为后面的<a href="https://baike.baidu.com/item/字符/4768913" target="_blank" rel="noopener">字符</a>，都不是它本来的ASCII字符意思了。</p>
+<table>
+<thead>
+<tr>
+<th>转义字符</th>
+<th>意义</th>
+<th>ASCII码值（十进制）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>\a</td>
+<td>响铃(BEL)</td>
+<td>007</td>
+</tr>
+<tr>
+<td>\b</td>
+<td>退格(BS) ，将当前位置移到前一列</td>
+<td>008</td>
+</tr>
+<tr>
+<td>\f</td>
+<td>换页(FF)，将当前位置移到下页开头</td>
+<td>012</td>
+</tr>
+<tr>
+<td>\n</td>
+<td>换行(LF) ，将当前位置移到下一行开头</td>
+<td>010</td>
+</tr>
+<tr>
+<td>\r</td>
+<td>回车(CR) ，将当前位置移到本行开头</td>
+<td>013</td>
+</tr>
+<tr>
+<td>\t</td>
+<td>水平制表(HT) （跳到下一个TAB位置）</td>
+<td>009</td>
+</tr>
+<tr>
+<td>\v</td>
+<td>垂直制表(VT)</td>
+<td>011</td>
+</tr>
+<tr>
+<td>\</td>
+<td>代表一个反斜线字符’’&#39;</td>
+<td>092</td>
+</tr>
+<tr>
+<td>&#39;</td>
+<td>代表一个单引号（撇号）字符</td>
+<td>039</td>
+</tr>
+<tr>
+<td>&quot;</td>
+<td>代表一个双引号字符</td>
+<td>034</td>
+</tr>
+<tr>
+<td>?</td>
+<td>代表一个问号</td>
+<td>063</td>
+</tr>
+<tr>
+<td>\0</td>
+<td>空字符(NUL)</td>
+<td>000</td>
+</tr>
+<tr>
+<td>\ddd</td>
+<td>1到3位八进制数所代表的任意字符</td>
+<td>三位八进制</td>
+</tr>
+<tr>
+<td>\xhh</td>
+<td>十六进制所代表的任意字符</td>
+<td>十六进制</td>
+</tr>
+</tbody></table>
+<p><img src="https://ae01.alicdn.com/kf/H1c837463558045dbbe01995b7ea10f4ao.jpg" alt="html转义表"></p>
+<p>转义无非是两种情况：</p>
+<p>1：将普通字符转为特殊用途，一般是编程语言中，用于表示不能直接显示的字符，比如后退键，回车键，等。2：用来将特殊意义的字符转换回它原来的意义。一般用在正则表达式中。还有有些脚本语言是弱类型，有些语言比如html 并不是编程语言，而是标记语言，有些语言只有一种类型 比如shell 脚本语言，这些语言中字符串都不加引号” ” ，或者可以不加引号“ ”，所以有时候需要转义字符说明某字符此时的身份是普通字符，而不是有特殊意义的元字符。比如你要显示&amp;quot;这个字符 ，而不出现&quot; ,可以采用两种方式 ，第一种是先把前面的&amp; 进行转义，再跟上后面的字符，这样就不会出现全部转义的情况，第二种可能在一些地方还是会识别，就是把后面的冒号去掉，推荐使用第一种 </p>
+<p>另外出于网站的安全。在数据写入数据库前，都会使用转义字符(函数)对一些敏感字符进行转义。这样做可以避免一些别有用心的人利用特殊符号的注入攻击。 [1]  [3] </p>
 
       
     </div>
@@ -503,6 +611,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/08/07/Untitled/" rel="prev" title>
+                 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -586,7 +698,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -671,7 +783,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#三种css预处理器"><span class="nav-number">1.</span> <span class="nav-text">三种css预处理器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#css预处理器的定义及由来"><span class="nav-number">1.1.</span> <span class="nav-text">css预处理器的定义及由来</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三种预处理器的简介"><span class="nav-number">1.2.</span> <span class="nav-text">三种预处理器的简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#sass"><span class="nav-number">1.2.1.</span> <span class="nav-text">sass</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#less"><span class="nav-number">1.2.2.</span> <span class="nav-text">less</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#stylus"><span class="nav-number">1.2.3.</span> <span class="nav-text">stylus</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在特性上的异同"><span class="nav-number">1.3.</span> <span class="nav-text">在特性上的异同</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#变量"><span class="nav-number">1.3.1.</span> <span class="nav-text">变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#作用域"><span class="nav-number">1.3.2.</span> <span class="nav-text">作用域</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#继承"><span class="nav-number">1.3.3.</span> <span class="nav-text">继承</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#导入-import"><span class="nav-number">1.3.4.</span> <span class="nav-text">导入@import</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">1.4.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#三种css预处理器"><span class="nav-number">1.</span> <span class="nav-text">三种css预处理器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#css预处理器的定义及由来"><span class="nav-number">1.1.</span> <span class="nav-text">css预处理器的定义及由来</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三种预处理器的简介"><span class="nav-number">1.2.</span> <span class="nav-text">三种预处理器的简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#sass"><span class="nav-number">1.2.1.</span> <span class="nav-text">sass</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#less"><span class="nav-number">1.2.2.</span> <span class="nav-text">less</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#stylus"><span class="nav-number">1.2.3.</span> <span class="nav-text">stylus</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在特性上的异同"><span class="nav-number">1.3.</span> <span class="nav-text">在特性上的异同</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#变量"><span class="nav-number">1.3.1.</span> <span class="nav-text">变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#作用域"><span class="nav-number">1.3.2.</span> <span class="nav-text">作用域</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#嵌套"><span class="nav-number">1.3.3.</span> <span class="nav-text">嵌套</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#继承"><span class="nav-number">1.3.4.</span> <span class="nav-text">继承</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#导入-import"><span class="nav-number">1.3.5.</span> <span class="nav-text">导入@import</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Imports"><span class="nav-number">1.3.6.</span> <span class="nav-text">Imports</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">1.4.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
             
 
           </div>
