@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="A Coder&#39;s World">
+  <meta name="author" content="YoungOcean">
+  <meta name="keywords" content>
+  <title>CSS预编译 - Young&#39;s Blog</title>
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css">
+  <link rel="stylesheet" href="/lib/hint/hint.min.css">
+
+  
+    <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css">
+  
+
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_yg9cfy8wd6.css">
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script src="/js/utils.js"></script>
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Young</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+  <div class="mt-3 post-meta">
+    <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+    <time datetime="2019-08-06 21:35">
+      2019年8月6日 晚上
+    </time>
+  </div>
+
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      2.8k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      32
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <article class="markdown-body">
+              <h1 id="三种css预处理器"><a href="#三种css预处理器" class="headerlink" title="三种css预处理器"></a>三种css预处理器</h1><h2 id="css预处理器的定义及由来"><a href="#css预处理器的定义及由来" class="headerlink" title="css预处理器的定义及由来"></a>css预处理器的定义及由来</h2><p>定义：预编译又称为预处理，是做些代码文本的替换工作处理，条件编译等就是为编译做的预备工作的阶段主要处理#开始的预编译指令预编译指令指示了在程序正式编译前就由编译器进行的操作，可以放在程序中的任何位置。</p>
+<p>由于css的繁重、冗杂样式、加上低复用性，使得css被开发出来 弥补了css的以下缺憾</p>
+<ul>
+<li>语法不够强大  无法嵌套使得模块化开发中需要书写很多重复的选择器</li>
+<li>没有变量和合理的样式复用机制，使得必须以字面量形式重复输出，使难以维护</li>
+</ul>
+<h2 id="三种预处理器的简介"><a href="#三种预处理器的简介" class="headerlink" title="三种预处理器的简介"></a>三种预处理器的简介</h2><p><strong>Sass</strong>：2007年诞生，最早也是最成熟的CSS预处理器，拥有ruby社区的支持和 compass这一最强大的css框架，目前受LESS影响，已经进化到了全面兼容CSS的SCSS。<a href="https://link.zhihu.com/?target=http%3A//sass.bootcss.com/docs/sass-reference/" target="_blank" rel="noopener">sass 中文文档</a><a href="https://link.zhihu.com/?target=http%3A//sass.bootcss.com/docs/sass-reference/" target="_blank" rel="noopener">Sass 参考手册</a></p>
+<p><strong>Less</strong>：2009年出现，受SASS的影响较大，但又使用CSS的语法，让大部分开发者和设计师更容易上手，在ruby社区之外支持者远超过SASS，其缺点是比起SASS来，可编程功能不够，不过优点是简单和兼容CSS，反过来也影响了SASS演变到了SCSS的时代，著名的Twitter Bootstrap就是采用LESS做底层语言的。<a href="https://link.zhihu.com/?target=http%3A//less.bootcss.com" target="_blank" rel="noopener">Less 中文文档</a></p>
+<p><strong>Stylus</strong>：2010年产生，来自Node.js社区，主要用来给Node项目进行CSS预处理支持，在此社区之内有一定支持者，在广泛的意义上人气还完全不如SASS和LESS。<a href="https://link.zhihu.com/?target=http%3A//wiki.jikexueyuan.com/project/harp-doc/Stylus.html" target="_blank" rel="noopener">Stylus 中文文档</a></p>
+<h3 id="sass"><a href="#sass" class="headerlink" title="sass"></a>sass</h3><p>Sass有两种语法，分别以[*.sass]和[*.scss]为拓展名,Sass兼容css，可以省去格式的麻烦，例如</p>
+<div class="hljs"><pre><code class="hljs sass">/*style.sass*/
+h1
+  color: #666
+  background-color: #666</code></pre></div>
+
+<h3 id="less"><a href="#less" class="headerlink" title="less"></a>less</h3><p>Less 受 Sass 的影响非常大，以「 *.less 」为扩展名，是 sass 之后的又一款优秀的 css 预处理器。其特点包括：</p>
+<ul>
+<li>变量：就像写其他语言一样，免于多处修改。</li>
+<li>混合：<strong>class 之间的轻松引入和继承。</strong></li>
+<li>嵌套：选择器之间的嵌套使你的 less 非常简洁。</li>
+<li>函数&amp;运算：就像 js 一样，对 less 变量的操控更灵活。</li>
+</ul>
+<p>例如：</p>
+<div class="hljs"><pre><code class="hljs css">@base: #f938ab;
+
+.box-shadow(@style, @c) when (iscolor(@c)) &#123;
+  box-shadow:         @style @c;
+  -webkit-box-shadow: @style @c;
+  -moz-box-shadow:    @style @c;
+&#125;
+.box-shadow(@style, @alpha: 50%) when (isnumber(@alpha)) &#123;
+  .box-shadow(@style, rgba(0, 0, 0, @alpha));
+&#125;
+.box &#123; 
+  color: saturate(@base, 5%);
+  border-color: lighten(@base, 30%);
+  div &#123; .box-shadow(0 0 5px, 30%) &#125;
+&#125;</code></pre></div>
+
+<h3 id="stylus"><a href="#stylus" class="headerlink" title="stylus"></a>stylus</h3><p>Stylus 是一个高效、动态以及丰富的 CSS 预处理器。它同时支持缩进的和通俗的两种风格的 CSS 语法风格。</p>
+<p>Stylus 扩展名为「 *.styl 」，跟另外两款 css 预处理器相比略显年轻，社区以及推广程度也不及 sass 和 less，但它的一些优秀特性同样令人着迷。</p>
+<p><a href="https://link.zhihu.com/?target=https%3A//tj.github.io/nib/" target="_blank" rel="noopener">Nib</a>是 Stylus 的应用的类库。给你的「 *.styl 」添加 Nib 的最快方式是克隆 Nib 的 Git 版本库并引入，因为有了 Nib，Stylus 的高效性才更为突出。</p>
+<p>容错性好，你可以在一个 Stylus 文件里这样写，且它们都会被编译成标准 css：</p>
+<div class="hljs"><pre><code class="hljs css"><span class="hljs-comment">/*style.styl*/</span>
+<span class="hljs-comment">/*类似于CSS标准语法*/</span>
+<span class="hljs-selector-tag">h1</span> &#123;
+  <span class="hljs-attribute">color</span>: <span class="hljs-number">#963</span>;
+  <span class="hljs-attribute">background-color</span>:<span class="hljs-number">#333</span>;
+&#125;
+<span class="hljs-comment">/*省略大括号（｛｝）*/</span>
+<span class="hljs-selector-tag">h1</span> 
+  <span class="hljs-selector-tag">color</span>: <span class="hljs-selector-id">#963</span>;
+  <span class="hljs-selector-tag">background-color</span>: <span class="hljs-selector-id">#333</span>;
+<span class="hljs-comment">/*省略大括号（｛｝）和分号（;）*/</span>
+<span class="hljs-selector-tag">h1</span>
+  <span class="hljs-selector-tag">color</span>:<span class="hljs-selector-id">#963</span>
+  <span class="hljs-selector-tag">background-color</span>:<span class="hljs-selector-id">#333</span></code></pre></div>
+
+<h2 id="在特性上的异同"><a href="#在特性上的异同" class="headerlink" title="在特性上的异同"></a>在特性上的异同</h2><h3 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h3><ul>
+<li>Sass声明变量必须是『$』开头，后面紧跟变量名和变量值，而且变量名和变量值需要使用冒号：分隔开。</li>
+<li>Less 声明变量用『@』开头，其余等同 Sass。</li>
+<li>Stylus 中声明变量没有任何限定，结尾的分号可有可无，但变量名和变量值之间必须要有『等号』。但需要注意的是，如果用“@”符号来声明变量，Stylus会进行编译，但不会赋值给变量。就是说，Stylus 不要使用『@』声明变量。Stylus 调用变量的方法和Less、Sass完全相同。</li>
+</ul>
+<h3 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h3><p>css 预编译器把变量赋予作用域，也就是存在生命周期。就像 js 一样，它会先从局部作用域查找变量，依次向上级作用域查找。</p>
+<ul>
+<li>Sass：三者最差，不存在全局变量的概念。也就是说在 Sass 中定义了相同名字的变量时你就要小心了。</li>
+<li>Less：我认为跟 JS 一样，逐级查找，向上冒泡。</li>
+<li>Stylus：完全等同 Less。Stylus 和 Sass 则更倾向于指令式。</li>
+</ul>
+<h3 id="嵌套"><a href="#嵌套" class="headerlink" title="嵌套"></a>嵌套</h3><p>在使用子选择器时，CSS缺乏可视化层次结构。 您必须在单独的行中编写选择器及其组合。 嵌套提供了HTML中的可视化层次结构，并提高了可读性。 在某些情况下，嵌套会导致选择器过大而类似“选择器列车”，因此请明智地使用它。下面为具体实例</p>
+<p><img src="https://ae01.alicdn.com/kf/H040155c5cad5460e98ae836f2081f4abI.jpg" srcset="/img/loading.gif" alt="实例"></p>
+<h3 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h3><p><a href="https://www.liaoxuefeng.com/wiki/897692888725344/923030524000032" target="_blank" rel="noopener">对多重继承较为完善的理解</a></p>
+<p><a href="https://zh.wikipedia.org/wiki/%E9%B8%AD%E5%AD%90%E7%B1%BB%E5%9E%8B" target="_blank" rel="noopener">对鸭子类型的理解</a>  此处的对数据类型的理解为：在python中如果你定义了一个字符串 使用了*符号，也可以进行计算，在用函数操作时，会识别你是继承自那个类，如果是字符串类，则进行拼接字符串，如果是数字，则继承数字类进行计算</p>
+<p>或者理解为，在字符串类和数字类中，都有*该方法，但是定义的效果不同，因此当你声明变量的时候，就已经把该类赋予给了对象，因此可以调用其方法 此处引申到<a href="https://zh.wikipedia.org/wiki/%E5%A4%9A%E5%9E%8B_(%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6)" target="_blank" rel="noopener">多态的概念</a></p>
+<p>css 属性的继承是一个非常重要的特性，好消息是三种预编译器都对此做出了改善。</p>
+<ul>
+<li>Sass和Stylus的继承非常像，能把一个选择器的所有样式继承到另一个选择器上。使用『@extend』开始，后面接被继承的选择器。</li>
+</ul>
+<div class="hljs"><pre><code class="hljs sass">.shit &#123;
+  margin: 10px 5px;
+  padding: 2px;
+&#125;
+p &#123;
+  @extend .shit;/*继承.block*/
+  border: 1px solid #aaa;
+&#125;
+ul,li &#123;
+  @extend .shit; /*继承.block*/
+  color: #aaa;
+&#125;</code></pre></div>
+
+<p>将被编译成标准 css：</p>
+<div class="hljs"><pre><code class="hljs css"><span class="hljs-selector-class">.shit</span>,<span class="hljs-selector-tag">p</span>,<span class="hljs-selector-tag">ul</span>,<span class="hljs-selector-tag">ol</span> &#123;
+  <span class="hljs-attribute">margin</span>: <span class="hljs-number">10px</span> <span class="hljs-number">5px</span>;
+  <span class="hljs-attribute">padding</span>:<span class="hljs-number">2px</span>;
+&#125;
+<span class="hljs-selector-tag">p</span> &#123;
+  <span class="hljs-attribute">border</span>: <span class="hljs-number">1px</span> solid <span class="hljs-number">#aaa</span>
+&#125;
+<span class="hljs-selector-tag">ul</span>,<span class="hljs-selector-tag">li</span> &#123;
+  <span class="hljs-attribute">color</span>:<span class="hljs-number">#aaa</span>;
+&#125;</code></pre></div>
+
+<ul>
+<li>Less 继承：与前两者继承方式有所区别，它不是在选择器上继承，而是将Mixins中的样式嵌套到每个选择器里面。然而这样会带来一个明显的缺点：每个选择器中会出现重复的样式。</li>
+</ul>
+<h3 id="导入-import"><a href="#导入-import" class="headerlink" title="导入@import"></a>导入@import</h3><p>CSS中，不建议用@import导入css，因为会增加http请求。但 CSS 预处理器中的导入和CSS的有hhe很大区别，它是将不同 css 是在语义上导入，最终编译结果会生成一个CSS文件。</p>
+<p>值得注意的是，如果不同文件相互引入的时候，出现相同变量名时可能会引起错误。所以我的建议是<strong>单独</strong>设一个 var.sass/less/styl 文件来记录所有你定义的变量。</p>
+<h3 id="Imports"><a href="#Imports" class="headerlink" title="Imports"></a>Imports</h3><p>Rather than using a one large file, separating your codes in small pieces is helpful for expressing your declarations and increasing maintainability and control over the codebase. You can group the similar code chunks in similar folders and import them to main css file. Also with <code>import</code> statement, frameworks can also be added to work packages.</p>
+<div class="hljs"><pre><code class="hljs sass">@import &quot;library&quot;;
+@import &quot;mixins/mixin.scss&quot;;
+@import &quot;reset.css&quot;;</code></pre></div>
+
+<div class="hljs"><pre><code class="hljs less"><span class="hljs-keyword">@import</span> <span class="hljs-string">"library"</span>
+<span class="hljs-variable">@import</span> <span class="hljs-string">"mixins/mixin.less"</span>
+<span class="hljs-variable">@import</span> <span class="hljs-string">"reset.css"</span></code></pre></div>
+
+<div class="hljs"><pre><code class="hljs stylus">@import <span class="hljs-string">"library"</span>
+@import <span class="hljs-string">"mixins/mixin.styl"</span>
+@import <span class="hljs-string">"reset.css</span></code></pre></div>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li>三种与编译器都各有优点，选择熟练的和对团队合作有利的</li>
+<li>stylus的便捷性更高，代码简洁</li>
+<li>Sass和Less语法严谨、Stylus相对自由。因为Less长得更像 css，所以它可能学习起来更容易。</li>
+</ul>
+<p>css选择器的内容 特异性也指优先级</p>
+<p>优先级：内嵌样式表&gt;层级样式表&gt;导入样式表</p>
+<p>内嵌样式&gt;id选择器&gt;类选择器&gt;元素选择器&gt;通用选择器和继承选择器</p>
+<p>最后定义的规则会覆盖任何先前的冲突规则。</p>
+<p>选择器具有相同的特异性值时，最新的规则优先。</p>
+<p>当选择器具有不相等的特异性值时，更具体的规则优先。</p>
+<p>JOSN建构于两种结构：</p>
+<ul>
+<li>“名称/值”对的集合（A collection of name/value pairs）。不同的语言中，它被理解为<em>对象（object）</em>，纪录（record），结构（struct），字典（dictionary），哈希表（hash table），有键列表（keyed list），或者关联数组 （associative array）。</li>
+<li>值的有序列表（An ordered list of values）。在大部分语言中，它被理解为数组（array）。</li>
+</ul>
+<p>关于转义字符，及取消转义字符的方法</p>
+<p>所有的<a href="https://baike.baidu.com/item/ASCII码" target="_blank" rel="noopener">ASCII码</a>都可以用“\”加数字（一般是8进制数字）来表示。而C中定义了一些字母前加\来表示常见的那些不能显示的ASCII<a href="https://baike.baidu.com/item/字符" target="_blank" rel="noopener">字符</a>，如\0,\t,\n等，就称为转义字符，因为后面的<a href="https://baike.baidu.com/item/字符/4768913" target="_blank" rel="noopener">字符</a>，都不是它本来的ASCII字符意思了。</p>
+<table>
+<thead>
+<tr>
+<th>转义字符</th>
+<th>意义</th>
+<th>ASCII码值（十进制）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>\a</td>
+<td>响铃(BEL)</td>
+<td>007</td>
+</tr>
+<tr>
+<td>\b</td>
+<td>退格(BS) ，将当前位置移到前一列</td>
+<td>008</td>
+</tr>
+<tr>
+<td>\f</td>
+<td>换页(FF)，将当前位置移到下页开头</td>
+<td>012</td>
+</tr>
+<tr>
+<td>\n</td>
+<td>换行(LF) ，将当前位置移到下一行开头</td>
+<td>010</td>
+</tr>
+<tr>
+<td>\r</td>
+<td>回车(CR) ，将当前位置移到本行开头</td>
+<td>013</td>
+</tr>
+<tr>
+<td>\t</td>
+<td>水平制表(HT) （跳到下一个TAB位置）</td>
+<td>009</td>
+</tr>
+<tr>
+<td>\v</td>
+<td>垂直制表(VT)</td>
+<td>011</td>
+</tr>
+<tr>
+<td>\</td>
+<td>代表一个反斜线字符’’&#39;</td>
+<td>092</td>
+</tr>
+<tr>
+<td>&#39;</td>
+<td>代表一个单引号（撇号）字符</td>
+<td>039</td>
+</tr>
+<tr>
+<td>&quot;</td>
+<td>代表一个双引号字符</td>
+<td>034</td>
+</tr>
+<tr>
+<td>?</td>
+<td>代表一个问号</td>
+<td>063</td>
+</tr>
+<tr>
+<td>\0</td>
+<td>空字符(NUL)</td>
+<td>000</td>
+</tr>
+<tr>
+<td>\ddd</td>
+<td>1到3位八进制数所代表的任意字符</td>
+<td>三位八进制</td>
+</tr>
+<tr>
+<td>\xhh</td>
+<td>十六进制所代表的任意字符</td>
+<td>十六进制</td>
+</tr>
+</tbody></table>
+<p><img src="https://ae01.alicdn.com/kf/H1c837463558045dbbe01995b7ea10f4ao.jpg" srcset="/img/loading.gif" alt="html转义表"></p>
+<p>转义无非是两种情况：</p>
+<p>1：将普通字符转为特殊用途，一般是编程语言中，用于表示不能直接显示的字符，比如后退键，回车键，等。2：用来将特殊意义的字符转换回它原来的意义。一般用在正则表达式中。还有有些脚本语言是弱类型，有些语言比如html 并不是编程语言，而是标记语言，有些语言只有一种类型 比如shell 脚本语言，这些语言中字符串都不加引号” ” ，或者可以不加引号“ ”，所以有时候需要转义字符说明某字符此时的身份是普通字符，而不是有特殊意义的元字符。比如你要显示&amp;quot;这个字符 ，而不出现&quot; ,可以采用两种方式 ，第一种是先把前面的&amp; 进行转义，再跟上后面的字符，这样就不会出现全部转义的情况，第二种可能在一些地方还是会识别，就是把后面的冒号去掉，推荐使用第一种 </p>
+<p>另外出于网站的安全。在数据写入数据库前，都会使用转义字符(函数)对一些敏感字符进行转义。这样做可以避免一些别有用心的人利用特殊符号的注入攻击。 [1]  [3] </p>
+
+            </article>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/学习/">学习</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Css-开发工具/">-Css -开发工具</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/08/07/css一些细节/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">css选择器及优先级</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2019/08/06/关于语言的分类/">
+                        <span class="hidden-mobile">关于语言的分类</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
+    </div>
+    
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/main.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: 'article.markdown-body',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "CSS预编译&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+  
+  
+    <script>
+      !function (e, t, a) {
+        function r() {
+          for (var e = 0; e < s.length; e++) s[e].alpha <= 0 ? (t.body.removeChild(s[e].el), s.splice(e, 1)) : (s[e].y--, s[e].scale += .004, s[e].alpha -= .013, s[e].el.style.cssText = "left:" + s[e].x + "px;top:" + s[e].y + "px;opacity:" + s[e].alpha + ";transform:scale(" + s[e].scale + "," + s[e].scale + ") rotate(45deg);background:" + s[e].color + ";z-index:99999");
+          requestAnimationFrame(r)
+        }
+
+        function n() {
+          var t = "function" == typeof e.onclick && e.onclick;
+          e.onclick = function (e) {
+            t && t(), o(e)
+          }
+        }
+
+        function o(e) {
+          var a = t.createElement("div");
+          a.className = "heart", s.push({
+            el: a,
+            x: e.clientX - 5,
+            y: e.clientY - 5,
+            scale: 1,
+            alpha: 1,
+            color: c()
+          }), t.body.appendChild(a)
+        }
+
+        function i(e) {
+          var a = t.createElement("style");
+          a.type = "text/css";
+          try {
+            a.appendChild(t.createTextNode(e))
+          } catch (t) {
+            a.styleSheet.cssText = e
+          }
+          t.getElementsByTagName("head")[0].appendChild(a)
+        }
+
+        function c() {
+          return "rgb(" + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + ")"
+        }
+
+        var s = [];
+        e.requestAnimationFrame = e.requestAnimationFrame || e.webkitRequestAnimationFrame || e.mozRequestAnimationFrame || e.oRequestAnimationFrame || e.msRequestAnimationFrame || function (e) {
+          setTimeout(e, 1e3 / 60)
+        }, i(".heart{width: 10px;height: 10px;position: fixed;background: #f00;transform: rotate(45deg);-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);}.heart:after,.heart:before{content: '';width: inherit;height: inherit;background: inherit;border-radius: 50%;-webkit-border-radius: 50%;-moz-border-radius: 50%;position: fixed;}.heart:after{top: -5px;}.heart:before{left: -5px;}"), n(), r()
+      }(window, document);
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
