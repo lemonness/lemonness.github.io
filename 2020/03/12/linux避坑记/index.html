@@ -210,6 +210,12 @@
         <div class="py-5" id="board">
           <div class="post-content mx-auto" id="post">
             
+              <p class="note note-info">
+                
+                  本文最后更新于：2020年3月12日 晚上
+                
+              </p>
+            
             <article class="markdown-body">
               <p>故事还要从一次卸载python说起，因为下了ranger的缘故，结果包不识别，一气之下把python给uninstall了，我正为我的操作感到得意之时，一串串的其它包飞速飘过，心里一惊，完蛋了，果然不出所料，电脑重启，然后就是一个黑乎乎的终端。种种原因，我放弃了这个系统，转而下载了一个新的ubuntu，本以为第二次有了经验，结果还是看着教程装，心想这次的教训还是得记着，就写下这篇文章，来比一些坑。</p>
 <h1 id="好戏开始"><a href="#好戏开始" class="headerlink" title="好戏开始"></a>好戏开始</h1><h2 id="1-安装"><a href="#1-安装" class="headerlink" title="1.安装"></a>1.安装</h2><h3 id="1-1安装时出了receiving-file-并卡住了"><a href="#1-1安装时出了receiving-file-并卡住了" class="headerlink" title="1.1安装时出了receiving file 并卡住了"></a>1.1安装时出了receiving file 并卡住了</h3><p>本以为导入vmware就万事大吉的我，结果发现安装的进度条在那不动了，然后就一顿狂搜。</p>
@@ -506,6 +512,45 @@
 
 
 
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://cdn.staticfile.org/mathjax/3.0.5/es5/tex-svg.js" ></script>
+
+  
+
 
 
   
@@ -565,6 +610,13 @@
 
 
 
+
+  <script  src="https://cdn.staticfile.org/mermaid/8.5.0/mermaid.min.js" ></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize({"theme":"default"});
+    }
+  </script>
 
 
 
