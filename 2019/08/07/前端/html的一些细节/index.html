@@ -16,7 +16,7 @@
   <meta name="description" content="A Coder&#39;s World">
   <meta name="author" content="YoungOcean">
   <meta name="keywords" content>
-  <title>关于开源许可证的一些理解 - Young&#39;s Blog</title>
+  <title>html的一些细节 - Young&#39;s Blog</title>
 
   <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
 
@@ -159,8 +159,8 @@
               
   <div class="mt-3 post-meta">
     <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-    <time datetime="2019-08-17 13:58">
-      2019年8月17日 下午
+    <time datetime="2019-08-07 20:55">
+      2019年8月7日 晚上
     </time>
   </div>
 
@@ -170,7 +170,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      354 字
+      324 字
     </span>
   
 
@@ -217,23 +217,21 @@
               </p>
             
             <article class="markdown-body">
-              <h1>关于license的粗略介绍</h1>
-当今各种软件，代码开源，各种各样的协议也非常多，这里简单的介绍一些
-
-<p>首先贴一个网址，看看软件开源方面有哪些许可证。</p>
-<p><a href="https://tldrlegal.com/" target="_blank" rel="noopener">软件简明许可证</a></p>
-<p>进入该网站，可查看各种协议，点击进入具体协议后，会列出该协议 能做，禁止做和必须做的三个部分，相当于你的活动范围，边界以及义务。点开fulltext即可查看全文，及具体的协议。</p>
-<p>说到这，联想到一个开源的问题，上网上查了一下 发现 阮一峰的一篇文章，具体解释了当今云服务与开源的冲突，使得协议也变得更加微妙</p>
-<p>这里贴上原链接<a href="http://www.ruanyifeng.com/blog/2019/06/open-database-relicensing.html" target="_blank" rel="noopener">http://www.ruanyifeng.com/blog/2019/06/open-database-relicensing.html</a></p>
-<p>说到这，就来说下github上的几种开源许可证</p>
-<p><strong>（1）Affero GPL (AGPL)</strong></p>
-<p>如果云服务（即 SAAS）用到的代码是该许可证，那么云服务的代码也必须开源。</p>
-<p><strong>（2）GPL</strong></p>
-<p>如果项目包含了 GPL 许可证的代码，那么整个项目都必须使用 GPL 许可证。</p>
-<p><strong>（3）LGPL</strong></p>
-<p>如果项目采用动态链接调用该许可证的库，项目可以不用开源。</p>
-<p><strong>（4）Mozilla（MPL）</strong></p>
-<p>只要该许可证的代码在单独的文件中，新增的其他文件可以不用开源。</p>
+              <h1 id="元素分类"><a href="#元素分类" class="headerlink" title="元素分类"></a>元素分类</h1><h2 id="块级元素和行内元素的区别"><a href="#块级元素和行内元素的区别" class="headerlink" title="块级元素和行内元素的区别"></a>块级元素和行内元素的区别</h2><p>HTML（超文本标记语言）中元素大多数都是块级元素或行内元素。块级元素占据其父元素（容器）的整个空间，因此创建了一个“块”。这篇文章帮助解释这个概念。通常浏览器会在块级元素前后另起一个新行。</p>
+<p>块级元素只能出现在 /<body> 元素内。</body></p>
+<p>块级元素与行内元素有几个关键区别：</p>
+<ul>
+<li><p>格式</p>
+<p>默认情况下，行内元素不会以新行开始，而块级元素会新起一行。</p>
+</li>
+<li><p>内容模型</p>
+<p>一般情况下，行内元素只能包含数据和其他行内元素。</p>
+<p>一般块级元素可以包含行内元素和其他块级元素。这种结构上的包含继承区别可以使块级元素创建比行内元素更”大型“的结构。</p>
+</li>
+</ul>
+<p>HTML 标准中块级元素和行内元素的区别至高出现在 4.01 标准中。在 HTML5，这种区别被一个更复杂的<a href="https://developer.mozilla.org/zh-CN/docs/HTML/Content_categories" target="_blank" rel="noopener">内容类别</a>代替。”块级“类别大致相当于 HTML5 中的<a href="https://developer.mozilla.org/zh-CN/docs/HTML/Content_categories#Flow_content" target="_blank" rel="noopener">流内容</a>类别，而”行内“类别相当于 HTML5 中的<a href="https://developer.mozilla.org/zh-CN/docs/HTML/Content_categories#Phrasing_content" target="_blank" rel="noopener">措辞内容</a>类别，不过除了这两个还有其他类别。</p>
+<p><img src="https://ae01.alicdn.com/kf/H2e5e6ab80b9f4e858d79810cfb0b1dc5Y.jpg" srcset="/img/loading.gif" alt="块级元素表"></p>
+<p><img src="https://ae01.alicdn.com/kf/Hc77a312d54a94fd6804fa3216e88f6940.jpg" srcset="/img/loading.gif" alt></p>
 
             </article>
             <hr>
@@ -251,7 +249,7 @@
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/license/">-license</a>
+                      <a class="hover-with-bg" href="/tags/html/">-html</a>
                     
                   </div>
                 
@@ -264,9 +262,9 @@
                   <div class="post-prev col-6">
                     
                     
-                      <a href="/2020/03/12/linux避坑记/">
+                      <a href="/2019/08/17/杂项/关于开源许可证的一些理解/">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">linux避坑记</span>
+                        <span class="hidden-mobile">关于开源许可证的一些理解</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -274,8 +272,8 @@
                   <div class="post-next col-6">
                     
                     
-                      <a href="/2019/08/07/html的一些细节/">
-                        <span class="hidden-mobile">html的一些细节</span>
+                      <a href="/2019/08/07/前端/css一些细节/">
+                        <span class="hidden-mobile">css选择器及优先级</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -440,7 +438,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "关于开源许可证的一些理解&nbsp;",
+        "html的一些细节&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,
