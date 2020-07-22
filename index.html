@@ -175,6 +175,64 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2020/07/22/关于c语言及其内存的一些记录/" target="_self">
+          <img src="https://i.loli.net/2020/07/22/SMN8CkyurJGFZ6X.png" srcset="/img/loading.gif" alt="关于c语言及其内存的一些记录">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 mx-auto index-info">
+      <a class="index-header" href="/2020/07/22/关于c语言及其内存的一些记录/">关于c语言及其内存的一些记录</a>
+
+      <a href="/2020/07/22/关于c语言及其内存的一些记录/" class="index-excerpt">
+        
+        
+          
+        
+        <div>今天看csapp第9章，该章最后列举了常见内存问题的列表，其中有一项是关于局部变量问题，我简单拓展一下该问题。
+这是一个最简单的函数调用例子
+/*
+demo1.c
+一个正常的程序
+*/
+int sum(int a,int b)&#123;
+    int c = a+b;
+    return c;
+&#125;
+int main()&#123;
+    int result;
+    resul</div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2020-07-22
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/计算机系统/">计算机系统</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/C-计算机系统/">-C -计算机系统</a>
+            
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
         <a href="/2020/07/13/图床搭建/" target="_self">
           <img src="https://i.loli.net/2020/07/13/VocvedWbmgCPiXt.png" srcset="/img/loading.gif" alt="图床搭建">
         </a>
@@ -568,47 +626,19 @@ element::after &#123; style properties &#125;  /* CSS3 </div>
     </div>
   </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a class="index-header" href="/2019/08/02/感想/关于我自己/">关于我自己</a>
-
-      <a href="/2019/08/02/感想/关于我自己/" class="index-excerpt">
-        
-        
-          
-        
-        <div>关于梦想，有很多话要说，只是手一放在键盘上，就不知该写下些什么，只好苦苦挤牙膏式的写着。先来说说我为什么要搭建博客吧，记得还是几年前，就觉得拥有一个自己的博客是一件非常了不起的事情，只是目光短浅，并没有实际去做，最后也只能落得一事无成，近来觉得本专业实在天坑，于是开始转攻计算机方向，开辟新大陆，这才想起，程序员的标配，拥有自己的一个博客，于是开始胡乱的开始找资料，一步一步的搭建。终于搭好，然后部署</div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>&nbsp;2019-08-02
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/梦想/">梦想</a>
-            
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/导航-分享/">-导航 -分享</a>
-            
-          </div>
-        
-      </div>
-    </div>
-  </div>
 
 
+  <nav aria-label="navigation">
+    <span class="pagination" id="pagination">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="iconfont icon-arrowright"></i></a>
+    </span>
+  </nav>
+  
+  <script>
+    for (ele of document.getElementById("pagination").getElementsByTagName("a")) {
+      ele.href += '#board';
+    }
+  </script>
 
 
 
