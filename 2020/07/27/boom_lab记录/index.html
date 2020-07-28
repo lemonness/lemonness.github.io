@@ -16,7 +16,7 @@
   <meta name="description" content="A Coder&#39;s World">
   <meta name="author" content="YoungOcean">
   <meta name="keywords" content>
-  <title>关于c语言及其内存的一些记录 - Young&#39;s Blog</title>
+  <title>csapp Boom_lab 实验记录 - Young&#39;s Blog</title>
 
   <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
 
@@ -146,7 +146,7 @@
 </nav>
 
     <div class="view intro-2" id="background" parallax=true
-         style="background: url('https://i.loli.net/2020/07/22/SMN8CkyurJGFZ6X.png') no-repeat center center;
+         style="background: url('http://qn.blogyoung.top/20200727161516.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.1)">
@@ -159,8 +159,8 @@
               
   <div class="mt-3 post-meta">
     <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-    <time datetime="2020-07-22 21:48">
-      2020年7月22日 晚上
+    <time datetime="2020-07-27 16:09">
+      2020年7月27日 下午
     </time>
   </div>
 
@@ -170,7 +170,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.9k 字
+      1.3k 字
     </span>
   
 
@@ -180,7 +180,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      25
+      17
        分钟
     </span>
   
@@ -212,227 +212,237 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2020年7月22日 晚上
+                  本文最后更新于：2020年7月27日 下午
                 
               </p>
             
             <article class="markdown-body">
-              <p>今天看csapp第9章，该章最后列举了常见内存问题的列表，其中有一项是关于局部变量问题，我简单拓展一下该问题。</p>
-<p>这是一个最简单的函数调用例子</p>
-<div class="hljs"><pre><code class="hljs c"><span class="hljs-comment">/*
-demo1.c
-一个正常的程序
-*/</span>
-<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">sum</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a,<span class="hljs-keyword">int</span> b)</span></span>&#123;
-    <span class="hljs-keyword">int</span> c = a+b;
-    <span class="hljs-keyword">return</span> c;
-&#125;
-<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;
-    <span class="hljs-keyword">int</span> result;
-    result=sum(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>);
-&#125;</code></pre></div>
+              <h1 id="Bomb-lab-实验记录"><a href="#Bomb-lab-实验记录" class="headerlink" title="Bomb lab 实验记录"></a>Bomb lab 实验记录</h1><h2 id="1-目的"><a href="#1-目的" class="headerlink" title="1.目的"></a>1.目的</h2><ul>
+<li>掌握x86汇编语言</li>
+<li>学会用gdb调试程序</li>
+<li>理解一些基础数据结构的汇编表示方法</li>
+</ul>
+<h2 id="2-实验准备"><a href="#2-实验准备" class="headerlink" title="2.实验准备"></a>2.实验准备</h2><p>做实验前先阅读writeup,在准备工具</p>
+<p>由于时间关系,我只详细记录最后两题的解题思路</p>
+<h3 id="1-Summary-of-GDB"><a href="#1-Summary-of-GDB" class="headerlink" title="1.Summary of GDB"></a>1.Summary of GDB</h3><p><a href="https://sourceware.org/gdb/current/onlinedocs/gdb/Summary.html#Summary" target="_blank" rel="noopener">https://sourceware.org/gdb/current/onlinedocs/gdb/Summary.html#Summary</a></p>
+<p><a href="http://csapp.cs.cmu.edu/3e/docs/gdbnotes-x86-64.pdf" target="_blank" rel="noopener">http://csapp.cs.cmu.edu/3e/docs/gdbnotes-x86-64.pdf</a></p>
+<ul>
+<li><code>print</code>，可显示变量的值</li>
+<li><code>info</code>，可显示寄存器的值</li>
+<li><code>x</code>，可显示内存值，examining的简写</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>p  [variable]@length</td>
+<td>打印变量值 或者打印变量数组</td>
+</tr>
+<tr>
+<td>info [register|stack|frame]</td>
+<td>查看运行时的各种属性</td>
+</tr>
+<tr>
+<td>x / [register]</td>
+<td>查看地址</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>格式</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>x</td>
+<td>十六进制</td>
+</tr>
+<tr>
+<td>d</td>
+<td>十进制</td>
+</tr>
+<tr>
+<td>u</td>
+<td>无符号数</td>
+</tr>
+<tr>
+<td>o</td>
+<td>八进制</td>
+</tr>
+<tr>
+<td>t</td>
+<td>二进制数</td>
+</tr>
+<tr>
+<td>a</td>
+<td>地址</td>
+</tr>
+<tr>
+<td>c</td>
+<td>ascii吗</td>
+</tr>
+<tr>
+<td>f</td>
+<td>浮点数</td>
+</tr>
+<tr>
+<td>s</td>
+<td>字符串</td>
+</tr>
+<tr>
+<td>i</td>
+<td>机器语言</td>
+</tr>
+</tbody></table>
+<h3 id="2-cgdb的下载-这里用cgdb的图形界面比较方便"><a href="#2-cgdb的下载-这里用cgdb的图形界面比较方便" class="headerlink" title="2.cgdb的下载,这里用cgdb的图形界面比较方便"></a>2.cgdb的下载,这里用cgdb的图形界面比较方便</h3><p>cgdb安装</p>
+<p>注意看readme</p>
+<div class="hljs"><pre><code class="hljs shell">git clone git://github.com/cgdb/cgdb.git
+cd cgdb
+sudo apt install automake autoconf
+./autogen.sh
 
-<p>我们将上述代码中的sum函数改写成汇编的形式</p>
-<div class="hljs"><pre><code class="hljs assembly">/* sum: a in %rdi ,b in %rsi , c in %rax*/
-movq %rdi %rax  // c=a
-addq %rsi %rax	// c=a+b
-retq			// return c</code></pre></div>
+sudo apt install libreadline-dev libncurses5-dev libncursesw5-dev flex textinfo
+./configure --prefix=/usr/local
+make
+sudo make install</code></pre></div>
 
-<p>上面的代码根据以下两点知识：</p>
-<p>1.程序在编译时，编译器不会为局部变量创建空间</p>
-<p>2.程序运行时,局部变量在没有引用其地址时，且局部变量个数不大于保存变量寄存器的个数时，会将局部变量直接保存在寄存器中，节省数据拷贝的时间和内存空间</p>
-<p>我们现在将代码改一下</p>
-<div class="hljs"><pre><code class="hljs c"><span class="hljs-comment">/*
-demo2.c
-有bug的程序
-*/</span>
-<span class="hljs-function"><span class="hljs-keyword">int</span>* <span class="hljs-title">sum</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a,<span class="hljs-keyword">int</span> b)</span></span>&#123;
-    <span class="hljs-keyword">int</span> c = a+b;
-    <span class="hljs-keyword">return</span> &amp;c;
-&#125;
-<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;
-    <span class="hljs-keyword">int</span> result;
-    result=sum(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>);
-&#125;</code></pre></div>
-
-<p>上面的程序在编译时,会报如下错误</p>
+<p>配置文件：</p>
 <blockquote>
-<p>warning: function returns address of local variable [-Wreturn-local-addr]</p>
+<p>  ~/.cgdb/cgdbrc</p>
 </blockquote>
-<p>我们用汇编语言来表示以下sum函数,这里省略一些寄存器的保存操作</p>
-<div class="hljs"><pre><code class="hljs assembly">/* sum: a in %rdi ,b in %rsi , c in %rdx , &amp;c in %rax*/
+<div class="hljs"><pre><code class="hljs rc">set ignorecase
+set ts=4
+set wso=vertical
+set eld=shortarrow
+set hls
+map &lt;F9&gt; :until&lt;cr&gt;</code></pre></div>
 
-movq %rdi %rdx  // c=a
-addq %rsi %rdx	// c=a+b
-push %rdx		//将变量压入栈
-movq %rsp %rax  //
-retq			// return &amp;c</code></pre></div>
+<h3 id="3-查看每次输入数据的格式"><a href="#3-查看每次输入数据的格式" class="headerlink" title="3.查看每次输入数据的格式"></a>3.查看每次输入数据的格式</h3><p>查看输入格式.这里查看</p>
+<div class="hljs"><pre><code class="hljs assembly">400f51:	be cf 25 40 00       	mov    $0x4025cf,%esi
+400f56:	b8 00 00 00 00       	mov    $0x0,%eax
+400f5b:	e8 90 fc ff ff       	callq  400bf0 &lt;__isoc99_sscanf@plt&gt;
+当需要格式化输入的时候,查看$esi的值</code></pre></div>
 
-<p>上面的代码根据以下两点知识：</p>
-<p>1.由于程序引用了变量的地址,且为局部变量,所以要把局部变量压入栈中,并获得其在栈中的变量地址</p>
-<p>2.程序从sum返回时,将会改变%rbp的值(此处未列出,具体可查表),使得sum函数所分配的所有局部变量被释放.编译器在编译时,会发现该错误并终止编译</p>
-<p>我们也可以看一下书上的解释</p>
-<p><img src="https://i.loli.net/2020/07/22/znJyCb3HAZ6l9u2.jpg" srcset="/img/loading.gif" alt="cerror"></p>
-<p>明白了上述解释，就能明白局部变量的使用问题。现在gcc编译时就能检查出该问题。</p>
-<p>继续修改一下代码</p>
-<div class="hljs"><pre><code class="hljs c"><span class="hljs-comment">/*
-demo3.c
-有bug的程序
-*/</span>
-<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">sum</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a,<span class="hljs-keyword">int</span> b,<span class="hljs-keyword">int</span> * result)</span></span>&#123;
-    <span class="hljs-keyword">int</span> c = a+b;
-	* result =c;
+<h2 id="2-实验记录"><a href="#2-实验记录" class="headerlink" title="2.实验记录"></a>2.实验记录</h2><p>第6题 </p>
+<p>阅读汇编代码，有几个关键的点需要仔细琢磨</p>
+<p>1.双层循环  明白内层和外层的不同作用</p>
+<div class="hljs"><pre><code class="hljs assembly">40114d:	49 83 c5 04          	add    $0x4,%r13
+401151:	eb c1                	jmp    401114 &lt;phase_6+0x20&gt; #外循环</code></pre></div>
 
-&#125;
-<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;
-    <span class="hljs-keyword">int</span> * result;
-    sum(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,result);
-	<span class="hljs-built_in">printf</span>(<span class="hljs-string">"result = %d\n"</span>,*result);
-&#125;</code></pre></div>
+<p>2.循环减7</p>
+<div class="hljs"><pre><code class="hljs assembly">401153:	48 8d 74 24 18       	lea    0x18(%rsp),%rsi
+401158:	4c 89 f0             	mov    %r14,%rax
+40115b:	b9 07 00 00 00       	mov    $0x7,%ecx
+401160:	89 ca                	mov    %ecx,%edx
+401162:	2b 10                	sub    (%rax),%edx
+401164:	89 10                	mov    %edx,(%rax)
+401166:	48 83 c0 04          	add    $0x4,%rax
+40116a:	48 39 f0             	cmp    %rsi,%rax
+40116d:	75 f1                	jne    401160 &lt;phase_6+0x6c&gt;
+40116f:	be 00 00 00 00       	mov    $0x0,%esi
+401174:	eb 21                	jmp    401197 &lt;phase_6+0xa3&gt;</code></pre></div>
 
-<p>程序在编译时会有如下错误：</p>
+<p>3.根据索引查找链表</p>
+<div class="hljs"><pre><code class="hljs assembly">401176:	48 8b 52 08          	mov    0x8(%rdx),%rdx</code></pre></div>
+
 <blockquote>
-<p>Segmentation fault (core dumped)</p>
+<p>上面为最关键的一行,也是确定数据结构的一行,根据这一行我们推测这题是一个链表结构,每一个链表节点有一个成员变量是一个指向下一个链表节点的指针,我们便能根据地址打印相关数据</p>
+<p>例如: x/24xw 0x6032d0 打印链表的结构  表示打印24个单元,以十六进制,单元大小为4字节</p>
 </blockquote>
-<p>这里需要搞清楚变量声明和定义，当声明一个基本类型的变量时(C里面没有这个概念，可以理解为除了数组，结构体和联合以外的变量)，编译器也不会为他分配空间。只有在定义的时候，也就是为变量赋值的时候，才会分配给该变量空间(这里的局部变量用到了指针,赋值时按上面的规则,会将变量保存在栈中) 。如果要修改上面的程序，可以将result声明为一个数的数组，当然实际中，会优化代码结构。</p>
-<div class="hljs"><pre><code class="hljs c"><span class="hljs-comment">/*
-demo4.c
-一种简单的修改方式
-*/</span>
-<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">sum</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a,<span class="hljs-keyword">int</span> b,<span class="hljs-keyword">int</span> * result)</span></span>&#123;
-    <span class="hljs-keyword">int</span> c = a+b;
-	* result =c;
+<p><img src="http://qn.blogyoung.top/image-20200726235359082.png" srcset="/img/loading.gif" alt="image-20200726235359082"></p>
+<p><img src="http://qn.blogyoung.top/image-20200726235341162.png" srcset="/img/loading.gif" alt="image-20200726235341162"></p>
+<p>在进行链表节点地址重排后,可以查看<code>%rsp+0x20</code>处后面的数组结构,发现是按照我们传入的数据进行节点地址的排序.</p>
+<p><img src="http://qn.blogyoung.top/image-20200726235429574.png" srcset="/img/loading.gif" alt="image-20200726235429574"></p>
+<p>最后一步为比较大小,按照value值降序排列,否则触发bomb,综上分析,我们根据汇编写一下类似的C源码</p>
+<div class="hljs"><pre><code class="hljs assembly">/* structure node */
+struct node&#123;
+int value; // 某四字节内容
+int order; // 原来节点的顺序 
+struct node* next; // 下一个node地址
+&#125; ;
 
-&#125;
-<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;
-    <span class="hljs-keyword">int</span> result[<span class="hljs-number">1</span>];
-    sum(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,result);
-	<span class="hljs-built_in">printf</span>(<span class="hljs-string">"result = %d\n"</span>,*result);
+/*C code in phtase 6*/
+void phase_7(......)&#123;
+	//part1
+	int i;
+	for(i=0;i&lt;6;i++)&#123;
+		int tmp = intarray[i];
+		if(tmp&gt;6) callbomb();  //每个数必须小于6
+		
+		for(;i&lt;6;i++)&#123; 
+			if(tmp=intarray[i]) callbomb(); 每个数都不相同
+		&#125;
+	&#125;
+	
+	//part2
+	for(i=0;i&lt;6;i++)&#123;
+		intarray[i]=7-intarray[i];
+	&#125;
+	
+	//part3 找到节点地址，并排序
+	struct node node*;
+	node* nodearray[6];
+	int tmpb;
+	for(i=0;i&lt;6;i++)&#123;
+		tmp = intarray[i];
+		for(tmpb=0;tmpb&lt;tmp;tmpb++)&#123;
+			node=node-&gt;next;
+		&#125;
+		nodearray[i]=node;
+	&#125;
+	
+	//part4 重新排列node的下一个索引地址，注意最后一个节点的下一个索引为0
+	for(i=0;i&lt;5;i++)&#123;
+		node = nodearray[i];
+		node-&gt;next = nodearray[i+1];
+	&#125;
+	nodearray[i]=0;  //最后一个节点置零
+	
+	//part5 比较大小，只需要比较5次
+	for(i=0;i&lt;5;i++)&#123;
+		node = nodearray[i];
+		if(node.value&lt;node-&gt;next.value) call_bomb();
+	&#125;
 &#125;</code></pre></div>
 
-<p>我们接着写一个书上的问题，关于动态分配栈空间</p>
-<div class="hljs"><pre><code class="hljs c"><span class="hljs-comment">//demo5.c</span>
-
-<span class="hljs-comment">/*
-n:创建的变长二维数组的长度
-idx:用来返回索引
-q:用来记录地址
-*/</span>
-<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">vframe</span><span class="hljs-params">(<span class="hljs-keyword">int</span> n,<span class="hljs-keyword">int</span> idx,<span class="hljs-keyword">int</span> *q)</span>
+<p>第7题:</p>
+<p>本lab还有一个彩蛋关卡.</p>
+<p>在defuse的两处设置断点,可以看出在<code>0x4015d8</code>出,会对<code>0x6</code>和<code>0x202181(%rsp)</code>进行对比,这里我们发现每解开一个程序后者会加1,所以解完前6个炸弹后,才会进入下面的判断代码</p>
+<p><img src="http://qn.blogyoung.top/image-20200727140906973.png" srcset="/img/loading.gif" alt="image-20200727140906973"></p>
+<p>进入判断后,发现是用第四题的输入做判断 我们修改第四题的输入 即进入了彩蛋关卡</p>
+<p><img src="http://qn.blogyoung.top/image-20200727141516651.png" srcset="/img/loading.gif" alt="image-20200727141516651"></p>
+<p>进入后,我们打印在<code>0x6030f0</code>处的值 发现是一个二叉树结构</p>
+<p><img src="http://qn.blogyoung.top/image-20200727150203195.png" srcset="/img/loading.gif" alt="image-20200727150203195"></p>
+<p>二叉树结构</p>
+<p><img src="http://qn.blogyoung.top/image-20200727152139222.png" srcset="/img/loading.gif" alt="image-20200727152139222"></p>
+<p>根据fun7的汇编,转换成C语言的代码</p>
+<div class="hljs"><pre><code class="hljs c"><span class="hljs-comment">//node pointer in %rdi,value in %rsi,return_value in %rax </span>
+<span class="hljs-comment">//require %rax to be 2</span>
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">fun7</span><span class="hljs-params">(Node* node,<span class="hljs-keyword">int</span> value)</span>
 </span>&#123;
-    <span class="hljs-keyword">int</span> i=<span class="hljs-number">1</span>;
-    <span class="hljs-keyword">int</span> *p[n];
-    p[<span class="hljs-number">0</span>] = &amp;i;
-    <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; n; i++)
-        p[i] = q;
-    <span class="hljs-keyword">return</span> *p[idx];
-&#125;
-
-<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">char</span> *argv[])</span>
-</span>&#123;
-    <span class="hljs-keyword">int</span> length=<span class="hljs-number">5</span>;
-	<span class="hljs-keyword">int</span> ida=<span class="hljs-number">2</span>;
-	<span class="hljs-keyword">int</span> t =<span class="hljs-number">3</span>;
-    
-	<span class="hljs-keyword">int</span> a = vframe (length, ida,&amp;t);
-    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"return value %d\n"</span>, a);
+  <span class="hljs-keyword">if</span>(value == <span class="hljs-number">0</span>)&#123;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;
+  &#125;
+  <span class="hljs-keyword">int</span> v = addr-&gt;value;
+  <span class="hljs-keyword">if</span>( v &lt; value)&#123;
+        <span class="hljs-keyword">return</span> <span class="hljs-number">1</span> + <span class="hljs-number">2</span>*fun7(addr-&gt;right,value);
+  &#125;<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (v == value)&#123;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+  &#125;<span class="hljs-keyword">else</span> &#123;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">2</span>*func7(addr-&gt;left,value);
+  &#125;
 &#125;</code></pre></div>
 
-<p>由于局部变量在编译时，编译器不会为其分配空间，因此，如果要分配一个动态的数组，一种方法如上所示，我们可以传入数组的大小，在内部进行一些计算后，返回结果。我们用objdump查看一下源码</p>
-<div class="hljs"><pre><code class="hljs assembly">/*
-int vframe(int n,int idx,int *q)
-n in rdi , idx in rsi, q in rdx
-*/
-
-00000000000006da &lt;vframe&gt;:
- 6da:	55                   	push   %rbp
- 6db:	48 89 e5             	mov    %rsp,%rbp
- 6de:	48 83 ec 10          	sub    $0x10,%rsp
- 6e2:	64 48 8b 04 25 28 00 	mov    %fs:0x28,%rax
- 6e9:	00 00 
- 6eb:	48 89 45 f8          	mov    %rax,-0x8(%rbp)
- 6ef:	31 c0                	xor    %eax,%eax
- 6f1:	48 63 c7             	movslq %edi,%rax
- 6f4:	48 8d 04 c5 16 00 00 	lea    0x16(,%rax,8),%rax
- 6fb:	00 
- 6fc:	48 83 e0 f0          	and    $0xfffffffffffffff0,%rax
- 700:	48 29 c4             	sub    %rax,%rsp
- 703:	48 8d 44 24 07       	lea    0x7(%rsp),%rax
- 708:	48 c1 e8 03          	shr    $0x3,%rax
- 70c:	4c 8d 04 c5 00 00 00 	lea    0x0(,%rax,8),%r8
- 713:	00 
- 714:	4c 89 c1             	mov    %r8,%rcx
- 717:	4c 8d 4d f4          	lea    -0xc(%rbp),%r9
- 71b:	4c 89 0c c5 00 00 00 	mov    %r9,0x0(,%rax,8)
- 722:	00 
- 723:	c7 45 f4 00 00 00 00 	movl   $0x0,-0xc(%rbp)
- 72a:	eb 0a                	jmp    736 &lt;vframe+0x5c&gt;
- 72c:	48 98                	cltq   
- 72e:	48 89 14 c1          	mov    %rdx,(%rcx,%rax,8)
- 732:	83 45 f4 01          	addl   $0x1,-0xc(%rbp)
- 736:	8b 45 f4             	mov    -0xc(%rbp),%eax
- 739:	39 f8                	cmp    %edi,%eax
- 73b:	7c ef                	jl     72c &lt;vframe+0x52&gt;
- 73d:	48 63 f6             	movslq %esi,%rsi
- 740:	49 8b 04 f0          	mov    (%r8,%rsi,8),%rax
- 744:	8b 00                	mov    (%rax),%eax
- 746:	48 8b 75 f8          	mov    -0x8(%rbp),%rsi
- 74a:	64 48 33 34 25 28 00 	xor    %fs:0x28,%rsi
- 751:	00 00 
- 753:	75 02                	jne    757 &lt;vframe+0x7d&gt;
- 755:	c9                   	leaveq 
- 756:	c3                   	retq   
- 757:	e8 44 fe ff ff       	callq  5a0 &lt;__stack_chk_fail@plt&gt;</code></pre></div>
-
-<p>6eb-700分配数组空间</p>
-<p>700-740 进行数组操作,其中的变量都保存在动态分配的栈中</p>
-<p>744 得到返回结果</p>
-<p>可以看到，该函数最后返回的是一个在该函数内分配的一个值，返回给寄存器后，没有地址的引用，所以可以正确返回。</p>
-<p>我们再来看一个别名的例子,当程序的不同部分指向内存中相同的位置时，这称为别名。别名的使用会影响到程序的优化，以下的代码很好的说明了，别名设置对数组的影响。</p>
-<div class="hljs"><pre><code class="hljs c"><span class="hljs-keyword">double</span> A[<span class="hljs-number">9</span>] = &#123;
-    <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>,
-    <span class="hljs-number">4</span>, <span class="hljs-number">8</span>, <span class="hljs-number">16</span>,
-    <span class="hljs-number">32</span>, <span class="hljs-number">64</span>, <span class="hljs-number">128</span>&#125;;
-
-<span class="hljs-comment">/*
-Sum rows is of n X n matrix a and store in vector b
-a: n*n array
-b: n array 
-n: size
-*/</span>
-<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">sum_rowsl</span><span class="hljs-params">(<span class="hljs-keyword">double</span> *a, <span class="hljs-keyword">double</span> *b, <span class="hljs-keyword">long</span> n)</span>
-</span>&#123;
-    <span class="hljs-keyword">long</span> i, j;
-    <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; n; i++)
-    &#123;
-        b[i] = <span class="hljs-number">0</span>;
-        <span class="hljs-keyword">for</span> (j = <span class="hljs-number">0</span>; j &lt; n; j++)
-        &#123;
-            b[i] += a[i * n + j];
-  <span class="hljs-comment">//          printf("%f\n", b[i]);</span>
-        &#125;
-    &#125;
-&#125;
-
-<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
-</span>&#123;
-    <span class="hljs-keyword">double</span> * B = A + <span class="hljs-number">3</span>;
-    sum_rowsl(A, B, <span class="hljs-number">3</span>);
-&#125;
-<span class="hljs-comment">//上述代码在每次i改变后，b的值都会改变，最终B的结果如下</span>
-<span class="hljs-number">32.000000</span>
-<span class="hljs-number">96.000000</span>
-<span class="hljs-number">224.000000</span></code></pre></div>
-
-<p>这里由于用objdump看结果不直观,我们用cgdb来查看</p>
-<p><img src="https://i.loli.net/2020/07/22/KzQ8WeBZPT1s2DE.png" srcset="/img/loading.gif" alt="image-20200722210210797"></p>
-<p>可以看到,main函数中,A,B,C的地址分别保存在%rdi,%rsi,%rdx中,然后调用sum_rowsl函数</p>
-<p>我们打印一下A中的值.可以看出,A数组和B数组引用了部分相同的内存空间</p>
-<p><img src="https://i.loli.net/2020/07/22/AbpJQXZ3CSV8O42.png" srcset="/img/loading.gif" alt="image-20200722212857390"></p>
-<p>进入sum_rowsl函数后,截取关键代码</p>
-<p>每次计算完b[i]的值后,都要将其写回%r12所指向的内存地址,即该数组中某个值的位置,因为a中也引用了该数组的内容,所以累加的结果不能保存在寄存器中,必须回写,然后每次再调用a的值时,从内存中取出.由于我们一开始的代码A定义的是全局变量,所以这里面没有用到栈,如果定义位局部变量,则会用到栈.上述情况明白后可以自己尝试.</p>
-<p><img src="https://i.loli.net/2020/07/22/eRQmMxz7wsBCgZE.png" srcset="/img/loading.gif" alt="image-20200722213145145"></p>
-<p>关于内存的问题,还有很多,bomblab,cachelab都有关于这方面的知识.</p>
+<p>根据递归关系 ,我们要获得2的结果,则关系式为2<code>*</code>(1+2*0),则输入值为22或20</p>
+<p>以上为最后两题解析,获得了很多收获</p>
+<p>最后截个图:</p>
+<p><img src="http://qn.blogyoung.top/image-20200727152251984.png" srcset="/img/loading.gif" alt="image-20200727152251984"></p>
+<p>以上记录方便以后查看.</p>
 
             </article>
             <hr>
@@ -442,7 +452,7 @@ n: size
                   <div class="post-meta mr-3">
                     <i class="iconfont icon-category"></i>
                     
-                      <a class="hover-with-bg" href="/categories/计算机系统/">计算机系统</a>
+                      <a class="hover-with-bg" href="/categories/csapp/">csapp</a>
                     
                   </div>
                 
@@ -450,7 +460,7 @@ n: size
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/C-计算机系统/">-C -计算机系统</a>
+                      <a class="hover-with-bg" href="/tags/lab-C-汇编/">-lab -C -汇编</a>
                     
                   </div>
                 
@@ -463,9 +473,9 @@ n: size
                   <div class="post-prev col-6">
                     
                     
-                      <a href="/2020/07/27/boom_lab记录/">
+                      <a href="/2020/07/28/attack-lab记录/">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">csapp Boom_lab 实验记录</span>
+                        <span class="hidden-mobile">attack_lab记录</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -473,8 +483,8 @@ n: size
                   <div class="post-next col-6">
                     
                     
-                      <a href="/2020/07/13/图床搭建/">
-                        <span class="hidden-mobile">图床搭建</span>
+                      <a href="/2020/07/22/关于c语言及其内存的一些记录/">
+                        <span class="hidden-mobile">关于c语言及其内存的一些记录</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -639,7 +649,7 @@ n: size
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "关于c语言及其内存的一些记录&nbsp;",
+        "csapp Boom_lab 实验记录&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,
